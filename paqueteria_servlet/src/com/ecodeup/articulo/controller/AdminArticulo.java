@@ -2,8 +2,10 @@ package com.ecodeup.articulo.controller;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Formatter;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.RequestDispatcher;
@@ -73,20 +75,26 @@ public class AdminArticulo extends HttpServlet {
 				buscar(request, response);
 				break;
 				
-			case "showedit":
-				showEditar(request, response);
-				break;	
-			case "editar":
-				editar(request, response);
-				break;
-			case "eliminar":
-				eliminar(request, response);
-				break;
+//			case "showedit":
+//				showEditar(request, response);
+//				break;	
+//			case "editar":
+//				editar(request, response);
+//				break;
+//			case "eliminar":
+//				eliminar(request, response);
+//				break;
 			default:
 				break;
 			}			
 		} catch (SQLException e) {
 			e.getStackTrace();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 		
@@ -110,15 +118,24 @@ public class AdminArticulo extends HttpServlet {
 		dispatcher.forward(request, response);
 	}
 
-	private void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		SimpleDateFormat Formatter = new SimpleDateFormat("yyyy-MM-dd");
+	private void registrar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException, ParseException {
+		String string = request.getParameter("fecha");
+		DateFormat format = new SimpleDateFormat("yyyy-dd-MM");
+		Date date = format.parse(string);
 		
-		Articulo articulo = new Articulo(0, request.getParameter("origen"), request.getParameter("destino"), request.getParameter("paquete"), Formatter.parse(request.getParameter("fecha")), request.getParameter("remitente"), request.getParameter("transportista"), Double.parseDouble(request.getParameter("precio")));
+		Articulo articulo = new Articulo(0, request.getParameter("origen"), request.getParameter("destino"), request.getParameter("paquete"), date, request.getParameter("remitente"), request.getParameter("transportista"), Double.parseDouble(request.getParameter("precio")));
 		articuloDAO.insertar(articulo);
 		
 		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
 		dispatcher.forward(request, response);
 	}
+	
+	
+	private Date parse(String parameter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	
 	private void nuevo(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
 		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/register.jsp");
@@ -140,25 +157,25 @@ public class AdminArticulo extends HttpServlet {
 	}	
 		// TODO Auto-generated method stub
 	
-	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
-		Articulo articulo = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
-		request.setAttribute("articulo", articulo);
-		
-		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/editar.jsp");
-		dispatcher.forward(request, response);
-	}
-	
-	private void editar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		Articulo articulo = new Articulo(Integer.parseInt(request.getParameter("id")), request.getParameter("origen"), request.getParameter("destino"), request.getParameter("paquete"), Formatter.parse(request.getParameter("fecha")), request.getParameter("remitente"), request.getParameter("transportista"), Double.parseDouble(request.getParameter("precio")));
-		articuloDAO.actualizar(articulo);
-		index(request, response);
-	}
-	
-	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
-		Articulo articulo = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
-		articuloDAO.eliminar(articulo);
-		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
-		dispatcher.forward(request, response);
-		
-	}
+//	private void showEditar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, SQLException {
+//		Articulo articulo = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+//		request.setAttribute("articulo", articulo);
+//		
+//		RequestDispatcher dispatcher = request.getRequestDispatcher("/vista/editar.jsp");
+//		dispatcher.forward(request, response);
+//	}
+//	
+//	private void editar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+//		Articulo articulo = new Articulo(Integer.parseInt(request.getParameter("id")), request.getParameter("origen"), request.getParameter("destino"), request.getParameter("paquete"), Formatter.parse(request.getParameter("fecha")), request.getParameter("remitente"), request.getParameter("transportista"), Double.parseDouble(request.getParameter("precio")));
+//		articuloDAO.actualizar(articulo);
+//		index(request, response);
+//	}
+//	
+//	private void eliminar(HttpServletRequest request, HttpServletResponse response) throws SQLException, ServletException, IOException{
+//		Articulo articulo = articuloDAO.obtenerPorId(Integer.parseInt(request.getParameter("id")));
+//		articuloDAO.eliminar(articulo);
+//		RequestDispatcher dispatcher = request.getRequestDispatcher("index.jsp");
+//		dispatcher.forward(request, response);
+//		
+//	}
 }

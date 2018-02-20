@@ -19,12 +19,20 @@
 			<td><input type="text" name="destino"/></td>	
 		</tr>
 		<tr>
-			<td>Paquete:</a></td>		
-			<td><input type="text" name="paquete"/></td>	
+			<td>Paquete:</a></td>
+			<td>
+			<select name="paquete">
+			<option>Pequeño</option>
+			<option>Mediano</option>
+			<option>Grande</option>
+			
+			</select>		
+			</td>
+	
 		</tr>
 		<tr>
 			<td>Fecha:</a></td>		
-			<td><input type="text" name="fecha"/></td>	
+			<td><input type="date" name="fecha"/></td>	
 		</tr>
 	      <tr>
 			<td>Remitente:</a></td>		
